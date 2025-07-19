@@ -1,19 +1,62 @@
+import 'dart:io';
+import 'dart:async';
 import 'content.dart';
 import 'interfaces.dart';
 import 'mixins.dart';
-import 'dart:async';
 
 void main() async {
-  print("\n");
-  // Text Post
-  var textPost = TextPost("Learning Dart is fun!", 30, 120);
-  await simulateContentCreation(textPost);
+  String? continueChoice;
 
-  // Image Post
-  var imagePost = ImagePost("https://example.com/image.jpg", 80, 20);
-  await simulateContentCreation(imagePost);
+  do {
+    print("Choose post type: 1. Text  2. Image  3. Video");
+    String? choice = stdin.readLineSync();
 
-  // Video Post
-  var videoPost = VideoPost(3.5, "https://example.com/video.mp4", 150, 60);
-  await simulateContentCreation(videoPost);
+    switch (choice) {
+      case '1':
+        print("Enter text content:");
+        String? text = stdin.readLineSync();
+        print("Enter number of likes:");
+        int likes = int.parse(stdin.readLineSync()!);
+        print("Enter number of comments:");
+        int comments = int.parse(stdin.readLineSync()!);
+
+        var textPost = TextPost(text!, comments, likes);
+        await simulateContentCreation(textPost);
+        break;
+
+      case '2':
+        print("Enter image URL:");
+        String? url = stdin.readLineSync();
+        print("Enter number of likes:");
+        int likes = int.parse(stdin.readLineSync()!);
+        print("Enter number of shares:");
+        int shares = int.parse(stdin.readLineSync()!);
+
+        var imagePost = ImagePost(url!, likes, shares);
+        await simulateContentCreation(imagePost);
+        break;
+
+      case '3':
+        print("Enter video duration in minutes:");
+        double duration = double.parse(stdin.readLineSync()!);
+        print("Enter video URL:");
+        String? url = stdin.readLineSync();
+        print("Enter number of views:");
+        int views = int.parse(stdin.readLineSync()!);
+        print("Enter number of likes:");
+        int likes = int.parse(stdin.readLineSync()!);
+
+        var videoPost = VideoPost(duration, url!, views, likes);
+        await simulateContentCreation(videoPost);
+        break;
+
+      default:
+        print("Invalid option.");
+    }
+
+    print("Would you like to create another post? (y/n)");
+    continueChoice = stdin.readLineSync();
+  } while (continueChoice?.toLowerCase() == 'y');
+
+  print("Thanks for using the Content Simulator ");
 }
