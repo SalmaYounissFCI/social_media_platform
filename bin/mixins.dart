@@ -22,6 +22,6 @@ mixin NotificationService {
 }
 mixin AnalyticsTracker {
   void trackEvent(String eventName) {
-    print("Tracked Event: $eventName");
+    print("Analytics Event: $eventName");
   }
 }

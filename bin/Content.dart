@@ -32,12 +32,7 @@ class TextPost extends Content
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      "type": "Text",
-      "content": txt,
-      "likes": likes,
-      "comments": comments,
-    };
+    return {"type": "Text", "text": txt, "likes": likes, "comments": comments};
   }
 
   @override
@@ -69,12 +64,7 @@ class ImagePost extends Content
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      "type": "Image",
-      "imageUrl": imgURL,
-      "likes": likes,
-      "comments": comments,
-    };
+    return {"type": "Image", "Url": imgURL, "likes": likes};
   }
 
   @override
@@ -103,13 +93,7 @@ class VideoPost extends Content
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      "type": "Video",
-      "videoUrl": videoUrl,
-      "duration": duration,
-      "likes": likes,
-      "comments": comments,
-    };
+    return {"type": "Video", "title": "Cool Video", "Views": likes};
   }
 
   @override
@@ -119,11 +103,32 @@ class VideoPost extends Content
 }
 
 Future<void> simulateContentCreation(Content content) async {
-  try {
-    print("\nCreating content...");
-    await Future.delayed(Duration(seconds: 2));
-    print("Content created: ${content.toJson()}");
-  } catch (e) {
-    print("Error: $e");
+  print("\nCreating ${content.getContentType()} post...");
+  await Future.delayed(Duration(seconds: 1));
+  print("Post details: ${content.toJson()}");
+
+  print("Content shared!");
+  print("Analytics Event: Post shared");
+  print("Content cached!");
+  if (content is Shareable) {
+    (content as Shareable).share();
   }
+  if (content is ApiConnector) {
+    (content as ApiConnector).fetchData();
+    (content as ApiConnector).sendData();
+  }
+  if (content is NotificationService) {
+    (content as NotificationService).sendPushNotification();
+  }
+
+  if (content is TextPost || content is VideoPost) {
+    print("Content passed moderation");
+    print("Push Notification sent!");
+  }
+
+  if (content is VideoPost) {
+    print("Content is being streamed...");
+  }
+
+  print("Engagement score: ${content.getEngagmentScore()}\n");
 }
